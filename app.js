@@ -1,3 +1,4 @@
+"use strict";
 // UNKNOWN
 var userInput;
 userInput = 5;
