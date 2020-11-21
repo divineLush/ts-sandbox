@@ -15,13 +15,25 @@ const Logger = (logString: string) => {
 const WithTemplate = (template: string, hookId: string) => {
     console.log('Template factory')
 
-    return (constructor: any) => {
+    return <T extends { new (...args: any[]): { name: string } }>(originalConstructor: T) => {
         console.log('Rendering template...')
-        const hookEl = document.getElementById(hookId)
-        const p = new constructor()
-        if (hookEl) {
-            hookEl.innerHTML = template
-            hookEl.querySelector('h1')!.textContent = p.name
+
+        // WithTemplate gets added to a class
+        // In such a decorator function I can return a new constructor function
+        // Which will replace the old one
+        // Now the template will be rendered to the DOM only when
+        // The class is instantiated, not when decorator function is executed
+        // Which happens as soon as we define a class
+        return class extends originalConstructor {
+            constructor (..._: any[]) {
+                super() // originalConstructor call
+                console.log('New constructor function')
+                const hookEl = document.getElementById(hookId)
+                if (hookEl) {
+                    hookEl.innerHTML = template
+                    hookEl.querySelector('h1')!.textContent = this.name
+                }
+            }
         }
     }
 }
@@ -36,11 +48,12 @@ class Person {
     }
 }
 
-const pers = new Person()
+const pers = new Person() // if I don't instantiate this class nothing will be rendered
 console.log(pers)
 
 // PROPERTY DECORATORS
 // Executes when our class definition is registered in JS, when we define the property
+// Target is either a prototype or constructor function
 const Log = (target: any, propertyName: string | Symbol) => {
     console.log('')
     console.log('Property decorator')
@@ -94,8 +107,40 @@ class Product {
             throw new Error('Invalid price - should be positive!')
     }
 
+    // Return values are supported for decorators that we add to methods or accessors
+    // But not for properites or parameters decorators
     @Log3
     getPriceWithTax (@Log4 tax: number) {
         return this._price * (1 + tax)
     }
 }
+
+
+const AutoBind = (_: any, _2: string, descriptor: PropertyDescriptor) => {
+    const originalMethod = descriptor.value
+    const adjustedDescriptor: PropertyDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            // This will refer to whatever is responsible for triggering this method
+            return originalMethod.bind(this)
+        }
+    }
+
+    return adjustedDescriptor
+}
+
+class Printer {
+    message = 'This works!'
+
+    // AutoBind ensures that this is always bound correctly
+    // No matter how we call showMessage
+    @AutoBind
+    showMessage() {
+        console.log(this.message)
+    }
+}
+
+const printer = new Printer()
+const button = document.querySelector('button')!
+button.addEventListener('click', printer.showMessage)

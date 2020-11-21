@@ -17,14 +17,19 @@ const Logger = (logString) => {
 };
 const WithTemplate = (template, hookId) => {
     console.log('Template factory');
-    return (constructor) => {
+    return (originalConstructor) => {
         console.log('Rendering template...');
-        const hookEl = document.getElementById(hookId);
-        const p = new constructor();
-        if (hookEl) {
-            hookEl.innerHTML = template;
-            hookEl.querySelector('h1').textContent = p.name;
-        }
+        return class extends originalConstructor {
+            constructor(..._) {
+                super();
+                console.log('New constructor function');
+                const hookEl = document.getElementById(hookId);
+                if (hookEl) {
+                    hookEl.innerHTML = template;
+                    hookEl.querySelector('h1').textContent = this.name;
+                }
+            }
+        };
     };
 };
 let Person = class Person {
@@ -95,3 +100,28 @@ __decorate([
     Log3,
     __param(0, Log4)
 ], Product.prototype, "getPriceWithTax", null);
+const AutoBind = (_, _2, descriptor) => {
+    const originalMethod = descriptor.value;
+    const adjustedDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            return originalMethod.bind(this);
+        }
+    };
+    return adjustedDescriptor;
+};
+class Printer {
+    constructor() {
+        this.message = 'This works!';
+    }
+    showMessage() {
+        console.log(this.message);
+    }
+}
+__decorate([
+    AutoBind
+], Printer.prototype, "showMessage", null);
+const printer = new Printer();
+const button = document.querySelector('button');
+button.addEventListener('click', printer.showMessage);
