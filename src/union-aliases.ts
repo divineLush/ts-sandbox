@@ -1,4 +1,5 @@
 // UNIONS
+
 // const combine = (input1: number | string, input2: number | string) => input1 + input2
 // Error! Operator '+' cannot be applied to types 'string | number' and 'string | number'
 
@@ -15,13 +16,17 @@ const combine = (input1: number | string, input2: number | string) => {
 
 console.log(combine('Alex', 'Anna'))
 
+
 // LITERAL TYPES
+
 let literalType: 'first' | 'second'
 // literalType = '1'
 // Error!
 literalType = 'first'
 
+
 // TYPE ALIASES
+
 type CustomType = 'custom' | { data: string }
 let customTypeTest: CustomType
 customTypeTest = 'custom'

@@ -21,7 +21,9 @@ console.log(countAndDescribe(['black metal', 'death metal', 'doom metal']))
 const extractAndConvert = <T extends object, U extends keyof T>(obj: T, key: U) => obj[key]
 console.log(extractAndConvert({ genre: 'doom metal' }, 'genre'))
 
+
 // GENERIC CLASSES
+
 class DataStorage<T> { // should only work with primitive types
     private data: T[] = []
 
@@ -60,7 +62,9 @@ objectStorage.addItem(blackMetal)
 objectStorage.removeItem(blackMetal) // works fine
 console.log(objectStorage.getItems())
 
+
 // GENEREIC UTILITY TYPES
+
 interface CourseGoal {
     title: string
     description: string

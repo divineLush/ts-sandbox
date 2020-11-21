@@ -1,4 +1,5 @@
 // OBJECTS TYPES
+
 const person = {
     name: 'Alex',
     age: 23
@@ -18,6 +19,7 @@ const typedPerson: {
 
 
 // ARRAYS TYPES
+
 const personWithArray = {
     name: 'Alex',
     age: 23,
@@ -35,6 +37,7 @@ for (const hobby of personWithArray.hobbies)
 
 
 // TUPLES
+
 const personWithTuple: {
     name: string,
     age: number,
@@ -53,6 +56,7 @@ console.log(personWithTuple)
 
 
 // ENUMS
+
 enum Role {
     ADMIN, // 0
     READ_ONLY, // 1
@@ -73,6 +77,8 @@ const personWithEnum = {
 
 console.log(Role.ADMIN, personWithEnum)
 
+
 // ANY
+
 let array: any[]
 array = [1, '2', personWithEnum]

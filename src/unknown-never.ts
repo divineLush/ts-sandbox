@@ -1,4 +1,5 @@
 // UNKNOWN
+
 let userInput: unknown
 userInput = 5
 userInput = '2'
@@ -10,7 +11,9 @@ let anyInput: any
 userName = anyInput // No error!
 // Unknown is more strict than any
 
+
 // NEVER
+
 // Another typee functions can return
 const generateError = (message: string, errorCode: number) => {
     throw { message, errorCode }
