@@ -1,9 +1,6 @@
 "use strict";
-// UNIONS
-// const combine = (input1: number | string, input2: number | string) => input1 + input2
-// Error! Operator '+' cannot be applied to types 'string | number' and 'string | number'
-var combine = function (input1, input2) {
-    var result;
+const combine = (input1, input2) => {
+    let result;
     if (typeof input1 === 'number' && typeof input2 === 'number') {
         result = input1 + input2;
     }
@@ -13,12 +10,7 @@ var combine = function (input1, input2) {
     return result;
 };
 console.log(combine('Alex', 'Anna'));
-// LITERAL TYPES
-var literalType;
-// literalType = '1'
-// Error!
+let literalType;
 literalType = 'first';
-var customTypeTest;
+let customTypeTest;
 customTypeTest = 'custom';
-// customTypeTest = 'test'
-// Error!
